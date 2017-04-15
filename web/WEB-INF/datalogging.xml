@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+
+    <!-- ETL CLOGS -->
+
+    <bean id="psposterPath" class="java.lang.String">
+        <constructor-arg><value>${clog.base}/udcuv2/poster/inbox/</value></constructor-arg>
+    </bean>
+
+    <bean id="psposter" class="com.opinmind.webapp.fileposter.SimplePoster" init-method="init" destroy-method="destroy">
+        <property name="inboxDir"             ref="psposterPath" />
+        <property name="errorDir"             value="${clog.base}/udcuv2/poster/error" />
+        <property name="scanIntervalSeconds"  value="${clog.poster.processing.interval.seconds}" />
+        <property name="maxConcurrentPosters" value="${clog.poster.threads}" />
+        <property name="posterWorker"         ref="psposterWorker" />
+    </bean>
+
+    <!-- etl clog file router -->
+    <bean id="etlUrlRouter" class="com.opinmind.webapp.fileposter.PreferenceUrlRouter" init-method="init" destroy-method="destroy">
+        <description>
+            PreferenceUrlRouter decides which loader to send files to.  periodically reads the following configFile properties to refresh some data structures
+            - etl.loader.hosts -> urlList
+            - etl.loader.hosts.downtime.threshold.seconds -> downtimeThresholdSeconds
+            - etl.loader.hosts.preference.table.TABLE_NAME -> index of preferred host ( starting with 0 )
+        </description>
+        <property name="configFiles" ref="configFileList" />
+        <property name="refreshSeconds" value="${etl.loader.hosts.refresh.seconds}" />
+    </bean>
+
+    <bean id="psposterWorker" class="com.opinmind.webapp.fileposter.SimplePosterWorker" init-method="init" destroy-method="destroy">
+        <constructor-arg ref="psposter" />
+        <property name="urlRouter" ref="etlUrlRouter" />
+        <property name="errorDir"   value="${clog.base}/udcuv2/poster/error" />
+        <property name="archiveDir" value="${clog.base}/udcuv2/poster/archive" />
+        <property name="enabled"    value="true" />
+        <property name="socketTimeoutInMinutes"     value="1440" />
+        <property name="connectionTimeoutInSeconds" value="10" />
+    </bean>
+
+
+
+    <bean id="pixelCLoggerParent" class="com.opinmind.clog.v3.CentralLoggerImpl" abstract="true" >
+        <property name="enabled"           value="true" />
+        <property name="logfilePath"       value="${clog.base}/udcuv2/tmp/"/>
+        <property name="rolloverPath"      ref  ="psposterPath"/>
+        <property name="rollOverInterval"  value="${clog.backup_interval_seconds}"/>
+        <property name="maxFileSize"       value="${clog.max_file_size}"/>
+    </bean>
+
+    <bean id="eventKeyValueLogger" parent="pixelCLoggerParent" init-method="init" destroy-method="destroy">
+        <property name="loggerName"        value="event_key_value_netezza" />
+    </bean>
+
+    <bean id="cookieKeyValueLogger" parent="pixelCLoggerParent" init-method="init" destroy-method="destroy">
+        <property name="loggerName"        value="cookie_key_value_netezza" />
+    </bean>
+
+    <bean id="cookieLinkCLogger" parent="pixelCLoggerParent" init-method="init" destroy-method="destroy">
+        <property name="loggerName" value="inf_cookie_adj_mat_netezza" />
+    </bean>
+
+    <bean id="conversionLogLogger" parent="pixelCLoggerParent" init-method="init" destroy-method="destroy">
+        <property name="loggerName" value="conversion_log_netezza" />
+    </bean>
+
+    <bean id="conversionExtensionLogger" parent="pixelCLoggerParent" init-method="init" destroy-method="destroy">
+        <property name="loggerName" value="conversion_extension_netezza" />
+    </bean>
+
+    <!-- END CLOGS -->
+
+</beans>

@@ -45,6 +45,5 @@
     <bean id="cmDataProcessor" class="com.yizhao.miniudcu.dataprocessor.CMPrefixDataProcessor"
           init-method="init" destroy-method="destroy">
        <!--<property name="cache" ref="userDataCache" />-->
-        <property name="ignoreNetworks" value="${udc.cookie_map.ignore.networks}" />
     </bean>
 </beans>
