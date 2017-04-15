@@ -2,25 +2,22 @@ package com.yizhao.miniudcu.dataprocessor;
 
 import com.yizhao.miniudcu.clog.CentralLogger;
 import com.yizhao.miniudcu.clog.ClogCookieKeyValue;
-import com.yizhao.miniudcu.util.RetryUtil;
 import org.apache.log4j.Logger;
 
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 /**
  * Created by yzhao on 4/15/17.
  */
-public class CMUDCUDataProcessor extends UDCUDataProcessor {
+public class CMPrefixDataProcessor extends UDCUDataProcessor {
     private List<Integer> ignoreNetworks = new ArrayList<Integer>();
 
-    private static final Logger log = Logger.getLogger(CMUDCUDataProcessor.class);
+    private static final Logger log = Logger.getLogger(CMPrefixDataProcessor.class);
 
     private CentralLogger cookieKeyValueLogger = null;
 
-    public CMUDCUDataProcessor() {
+    public CMPrefixDataProcessor() {
     }
 
     public void init() {}
