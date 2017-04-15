@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
+
+    <bean id="marketplaceLocalReadOnlyDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+          destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="username" value="${db.ro.user}" />
+        <property name="password" value="${db.ro.password}" />
+        <property name="testOnBorrow" value="true" />
+        <property name="validationQuery" value="SELECT 1" />
+        <property name="url"
+                  value="jdbc:mysql://${marketplace.ro.db.svr}/marketplace?connectTimeout=20000" />
+        <property name="maxActive" value="5" />
+        <property name="minIdle" value="1" />
+    </bean>
+
+    <bean id="udcuHelper" class="com.yizhao.miniudcu.UDCUHelper"
+          init-method="init" destroy-method="destroy">
+        <property name="configFile" value="/opt/opinmind/conf/udcuv2/config.properties" />
+        <property name="dataSource" ref="marketplaceLocalReadOnlyDataSource" />
+        <property name="overlapCheck" value="false" />
+    </bean>
+
+
+
+    <!-- UserDataCache - raw access to cache -->
+    <bean id="userDataCache" class="com.opinmind.ssc.cache.UserDataCacheFactory"
+          factory-method="createRemoteLinkedUserDataCache" init-method="init"
+          destroy-method="destroy">
+        <constructor-arg ref="cookieRouter" />
+        <constructor-arg type="int" value="${udcu.max.item.list.length}" />
+        <property name="bidgenCacheNodes" value="${udcu.bidgen.list}" />
+        <property name="userCookieCacheHost" value="${udcu.usercookie.cache.host}" />
+        <property name="httpBatchSize" value="${udcu.http.batch.size}" />
+        <property name="userDataCacheMC" ref="userDataCacheMC" />
+        <property name="cookieLinkCLogger" ref="cookieLinkCLogger" />
+        <property name="linkCookies" value="${udcu.link.cookies}" />
+    </bean>
+
+
+    <!-- UDCU v2 controller -->
+    <bean id="udcuController" class="com.yizhao.miniudcu.UDCUController"
+          init-method="init" destroy-method="destroy">
+        <property name="userDataCache" ref="userDataCache" />
+        <property name="udcuHelper" ref="udcuHelper" />
+
+        <property name="dataProcessorMap">
+            <map>
+                <entry key="ckv" value-ref="ckvDataProcessor" />
+                <entry key="ckvraw" value-ref="ckvrawDataProcessor" />
+                <entry key="cm" value-ref="cmDataProcessor" />
+            </map>
+        </property>
+
+        <property name="noOrderingHosts" value="${udcu.no.ordering.hosts}" />
+    </bean>
+
+    <bean id="ckvDataProcessor" class="com.yizhao.miniudcu.dataprocessor.CKVUDCUDataProcessor"
+          init-method="init" destroy-method="destroy">
+        <property name="cache" ref="userDataCache" />
+        <property name="pixelDataEngine" ref="pixelDataEngine" />
+        <property name="dataSource" ref="marketplaceLocalReadOnlyDataSource" />
+    </bean>
+
+    <bean id="ckvrawDataProcessor" class="com.yizhao.miniudcu.dataprocessor.CKVRawUDCUDataProcessor"
+          init-method="init" destroy-method="destroy">
+        <property name="cache" ref="userDataCache" />
+        <property name="pixelDataEngine" ref="pixelDataEngine" />
+        <property name="dataSource" ref="marketplaceLocalReadOnlyDataSource" />
+        <property name="cookieKeyValueLogger" ref="cookieKeyValueLogger" />
+        <property name="eventKeyValueLogger" ref="eventKeyValueLogger" />
+        <property name="conversionLogLogger" ref="conversionLogLogger" />
+        <property name="conversionExtensionLogger" ref="conversionExtensionLogger" />
+    </bean>
+
+
+    <bean id="cmDataProcessor" class="com.opinmind.udcuv2.dataprocessor.CMUDCUDataProcessor"
+          init-method="init" destroy-method="destroy">
+        <property name="cache" ref="userDataCache" />
+        <property name="ignoreNetworks" value="${udc.cookie_map.ignore.networks}" />
+    </bean>
+</beans>
