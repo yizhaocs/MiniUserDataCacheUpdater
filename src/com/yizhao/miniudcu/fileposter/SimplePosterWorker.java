@@ -1,13 +1,18 @@
 package com.yizhao.miniudcu.fileposter;
 
-import com.oracle.tools.packager.IOUtils;
+import com.yizhao.miniudcu.util.ConstantUtil.Constants;
+import com.yizhao.miniudcu.util.OtherUtils.ArgumentsUtil;
+import org.apache.commons.io.IOUtils;
 import com.yizhao.miniudcu.util.FileUtils.FileCreateUtil;
 import com.yizhao.miniudcu.util.FileUtils.FileMoveUtil;
 import com.yizhao.miniudcu.util.HttpConnectionUtils.HttpClientConnectionUtils;
+import com.yizhao.miniudcu.util.TimeUtils.StopWatch;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.log4j.Logger;
@@ -68,7 +73,7 @@ public class SimplePosterWorker implements PosterWorker {
             int httpStatus = response.getStatusLine().getStatusCode();
             responseEntity = response.getEntity();
             //Bug 7512 - require "OK" in response to confirm that file was successfully received
-            String responseBody = IOUtils.toString(responseEntity.getContent(), OpinmindConstants.UTF_8);
+            String responseBody = IOUtils.toString(responseEntity.getContent(), Constants.UTF_8);
             logger.info("AFTER POSTER UPLOAD: " + file + ", size " + file.length() + ", httpStatus: " + httpStatus + ", responseBody[" + responseBody + "]" );
 
             //SUCCESS only if responseBody starts with OK ( and non-null )
@@ -114,7 +119,7 @@ public class SimplePosterWorker implements PosterWorker {
     public void init() throws Exception {
 
         logger.info("Initializing PosterWorkerImpl...");
-        Args.validateDefined( urlRouter );
+        ArgumentsUtil.validateDefined( urlRouter );
         connectionManager = new PoolingClientConnectionManager();
         connectionManager.setMaxTotal( socketTimeoutInMinutes * 60000 );
         connectionManager.setDefaultMaxPerRoute( connectionTimeoutInSeconds * 1000 );

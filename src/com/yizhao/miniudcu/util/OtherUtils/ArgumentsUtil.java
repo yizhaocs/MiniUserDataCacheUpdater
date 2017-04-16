@@ -44,4 +44,22 @@ public class ArgumentsUtil {
             }
         }
     }
+
+    /**
+     * Validate that the parameters are not null.
+     *
+     * Minor tweak from Menon's OpinmindUtil, to enforce non-null arguments only ( zero length strings are ok )
+     *
+     * @param objects a vararg list of arguments to be validated.
+     * @throws NullPointerException if a null object is passed as an argument.
+     */
+    public static void validateDefined(Object... objects)
+            throws NullPointerException {
+        for (int i = 0; i < objects.length; i++) {
+            if (objects[i] == null)
+                throw new NullPointerException("The parameter number " + (i + 1)
+                        + " is null");
+        }
+    }
+
 }

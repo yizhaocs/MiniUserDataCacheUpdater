@@ -13,5 +13,5 @@ public class Constants {
     public static final String _WORKER_WAIT_MILLISECONDS = "worker.wait.milliseconds";
     public static final TimeZone UTC = TimeZone.getTimeZone("UTC");
 
-
+    public static final String UTF_8 = "UTF-8";
 }
