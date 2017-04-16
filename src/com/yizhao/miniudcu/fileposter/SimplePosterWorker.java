@@ -1,7 +1,15 @@
 package com.yizhao.miniudcu.fileposter;
 
+import com.oracle.tools.packager.IOUtils;
 import com.yizhao.miniudcu.util.FileUtils.FileCreateUtil;
 import com.yizhao.miniudcu.util.FileUtils.FileMoveUtil;
+import com.yizhao.miniudcu.util.HttpConnectionUtils.HttpClientConnectionUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -80,11 +88,11 @@ public class SimplePosterWorker implements PosterWorker {
 
             onSuccess(file,url);
         } catch (Exception e) {
-            OpinmindUtil.abort( httpPost ); //httpclient cleanup
+            HttpClientConnectionUtils.abort( httpPost ); //httpclient cleanup
             onFailure(file,url);
             throw e;
         } finally {
-            OpinmindUtil.consume( responseEntity ); //httpclient cleanup
+            HttpClientConnectionUtils.consume( responseEntity ); //httpclient cleanup
             poster.donePosting(file);
         }
 
