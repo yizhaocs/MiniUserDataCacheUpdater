@@ -1,6 +1,6 @@
 package com.yizhao.miniudcu.fileposter;
 
-import com.yizhao.miniudcu.util.FileUtils.FileContentReadingUtil;
+import com.yizhao.miniudcu.util.FileUtils.FileReadingUtil;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -24,7 +24,7 @@ public final class SimplePoster extends AbstractPoster implements Poster {
                     if (file.isDirectory()) {
                         return false;
                     }
-                    String[] prefixSuffix = FileContentReadingUtil.getFilePrefixSuffix(file);
+                    String[] prefixSuffix = FileReadingUtil.getFilePrefixSuffix(file);
                     String prefix = prefixSuffix[0];
                     String suffix = prefixSuffix[1];
                     int index = prefix.indexOf("-");

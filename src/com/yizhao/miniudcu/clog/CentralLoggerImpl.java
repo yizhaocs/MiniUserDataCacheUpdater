@@ -1,5 +1,6 @@
 package com.yizhao.miniudcu.clog;
 
+import com.yizhao.miniudcu.util.OtherUtils.ArgumentsUtil;
 import org.apache.log4j.Layout;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -31,7 +32,7 @@ public class CentralLoggerImpl implements CentralLogger {
     private ClogDecorator clogDecorator = null;
 
     public void init(){
-        Args.validateDefined( loggerName, logfilePath, rolloverPath, maxFileSize );
+        ArgumentsUtil.validateDefined( loggerName, logfilePath, rolloverPath, maxFileSize );
 
         //by default, behave like ETL clogging
         if( clogDecorator == null ){

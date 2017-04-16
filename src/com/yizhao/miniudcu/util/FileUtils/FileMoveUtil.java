@@ -39,7 +39,7 @@ public class FileMoveUtil {
         doMoveFile(file, toFile, overwrite);
     }
 
-    private static void doMoveFile(File fromFile, File toFile, boolean overwrite) throws IOException {
+    public static void doMoveFile(File fromFile, File toFile, boolean overwrite) throws IOException {
         if( logger.isDebugEnabled() ){
             logger.debug( "START moving file " + fromFile + " to " + toFile );
         }
