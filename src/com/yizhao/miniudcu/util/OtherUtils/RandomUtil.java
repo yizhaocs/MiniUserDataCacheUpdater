@@ -1,4 +1,6 @@
-package com.yizhao.miniudcu.util;
+package com.yizhao.miniudcu.util.OtherUtils;
+
+import com.yizhao.miniudcu.util.GenericObjectUtils.Pair;
 
 import java.util.Random;
 

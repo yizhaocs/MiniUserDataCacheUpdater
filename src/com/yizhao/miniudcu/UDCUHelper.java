@@ -1,6 +1,6 @@
 package com.yizhao.miniudcu;
 
-import com.yizhao.miniudcu.util.Constants;
+import com.yizhao.miniudcu.util.ConstantUtil.Constants;
 import org.apache.log4j.Logger;
 
 import java.io.FileInputStream;
@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;

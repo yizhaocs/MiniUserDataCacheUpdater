@@ -1,7 +1,9 @@
 package com.yizhao.miniudcu.fileprocessor;
 
 import com.yizhao.miniudcu.fileposter.Poster;
-import com.yizhao.miniudcu.util.FileUtil;
+import com.yizhao.miniudcu.util.FileUtils.FileCreateUtil;
+import com.yizhao.miniudcu.util.FileUtils.FileDeleteUtil;
+import com.yizhao.miniudcu.util.FileUtils.FileUtil;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -128,7 +130,7 @@ public abstract class AbstractPoster implements Poster {
      */
     public final void setInboxDir(String inboxDir) throws Exception {
         this.inboxDir = new File(inboxDir);
-        FileUtil.createDirectory(this.inboxDir);
+        FileCreateUtil.createDirectory(this.inboxDir);
     }
 
     /**
@@ -157,7 +159,7 @@ public abstract class AbstractPoster implements Poster {
      */
     public final void setErrorDir(String errorDir) throws Exception {
         this.errorDir = new File(errorDir);
-        FileUtil.createDirectory(this.errorDir);
+        FileCreateUtil.createDirectory(this.errorDir);
     }
 
     protected Set<String> getFilePrefixes() {
@@ -209,7 +211,7 @@ public abstract class AbstractPoster implements Poster {
                 }
             } else {
                 logger.info("Deleting zero length file " + file);
-                FileUtil.deleteFile(file);
+                FileDeleteUtil.deleteFile(file);
             }
         }
     }

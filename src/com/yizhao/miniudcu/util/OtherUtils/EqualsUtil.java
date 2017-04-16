@@ -1,4 +1,4 @@
-package com.yizhao.miniudcu.util;
+package com.yizhao.miniudcu.util.OtherUtils;
 
 import java.math.BigDecimal;
 import java.math.MathContext;

@@ -4,7 +4,7 @@ import com.yizhao.miniudcu.dataprocessor.UDCUDataProcessor;
 import com.yizhao.miniudcu.dataprocessor.UDCUDataProcessorFactory;
 import com.yizhao.miniudcu.fileprocessor.UDCUFileProcessor;
 import com.yizhao.miniudcu.cache.UserDataCache;
-import com.yizhao.miniudcu.util.ThreadUtil;
+import com.yizhao.miniudcu.util.ThreadUtils.ThreadUtil;
 import org.apache.log4j.Logger;
 
 import java.util.HashSet;

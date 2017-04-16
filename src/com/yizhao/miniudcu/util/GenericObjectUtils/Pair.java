@@ -1,4 +1,6 @@
-package com.yizhao.miniudcu.util;
+package com.yizhao.miniudcu.util.GenericObjectUtils;
+
+import com.yizhao.miniudcu.util.OtherUtils.EqualsUtil;
 
 import java.io.Serializable;
 

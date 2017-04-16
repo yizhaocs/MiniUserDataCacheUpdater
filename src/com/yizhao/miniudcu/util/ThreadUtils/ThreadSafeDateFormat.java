@@ -1,4 +1,4 @@
-package com.yizhao.miniudcu.util;
+package com.yizhao.miniudcu.util.ThreadUtils;
 
 
 import java.text.DateFormat;
