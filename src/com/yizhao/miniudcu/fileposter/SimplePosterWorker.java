@@ -1,6 +1,7 @@
 package com.yizhao.miniudcu.fileposter;
 
 import com.yizhao.miniudcu.util.FileUtils.FileCreateUtil;
+import com.yizhao.miniudcu.util.FileUtils.FileMoveUtil;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -91,12 +92,12 @@ public class SimplePosterWorker implements PosterWorker {
 
     private void onFailure(File file, String url) throws Exception {
         urlRouter.recordFailure(url);
-        OpinmindUtil.moveFile(file, errorDir);
+        FileMoveUtil.moveFile(file, errorDir);
     }
 
     private void onSuccess(File file, String url) throws Exception {
         urlRouter.recordSuccess(url);
-        OpinmindUtil.moveFile(file, archiveDir);
+        FileMoveUtil.moveFile(file, archiveDir);
 
     }
 

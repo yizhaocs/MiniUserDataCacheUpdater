@@ -5,7 +5,7 @@ import java.io.File;
 /**
  * Created by yzhao on 4/15/17.
  */
-public class FileReadingUtil {
+public class FileContentReadingUtil {
 
     /**
      * Get file prefix and suffix in an array - first element is prefix, second is
