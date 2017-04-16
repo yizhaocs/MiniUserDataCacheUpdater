@@ -1,10 +1,8 @@
-package com.yizhao.miniudcu.fileprocessor;
+package com.yizhao.miniudcu.fileposter;
 
-import com.yizhao.miniudcu.fileposter.Poster;
 import com.yizhao.miniudcu.util.CsvUtils.CsvUtil;
 import com.yizhao.miniudcu.util.FileUtils.FileCreateUtil;
 import com.yizhao.miniudcu.util.FileUtils.FileDeleteUtil;
-import com.yizhao.miniudcu.util.FileUtils.FileUtil;
 import com.yizhao.miniudcu.util.ThreadUtils.ThreadUtil;
 import org.apache.log4j.Logger;
 
