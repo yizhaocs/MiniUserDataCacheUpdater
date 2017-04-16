@@ -1,9 +1,11 @@
 package com.yizhao.miniudcu.fileprocessor;
 
 import com.yizhao.miniudcu.fileposter.Poster;
+import com.yizhao.miniudcu.util.CsvUtils.CsvUtil;
 import com.yizhao.miniudcu.util.FileUtils.FileCreateUtil;
 import com.yizhao.miniudcu.util.FileUtils.FileDeleteUtil;
 import com.yizhao.miniudcu.util.FileUtils.FileUtil;
+import com.yizhao.miniudcu.util.ThreadUtils.ThreadUtil;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -94,8 +96,8 @@ public abstract class AbstractPoster implements Poster {
     public void destroy() throws Exception {
         logger.info("Destroying PosterImpl...");
         // we do not force shut down so all pending files are posted.
-        OpinmindUtil.shutdown(workerScheduler, "Poster worker Sceduler");
-        OpinmindUtil.shutdown(posterScheduler, "Poster Sceduler");
+        ThreadUtil.shutdown(workerScheduler, "Poster worker Sceduler");
+        ThreadUtil.shutdown(posterScheduler, "Poster Sceduler");
         // we need to release the semaphore since we do not use the interruptible acquire
         int retries = 0;
         while(threadThrottler.hasQueuedThreads()){

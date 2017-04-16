@@ -43,4 +43,11 @@ public class ThreadUtil {
         }
         return remainingThreads;
     }
+
+    public static void shutdown(ExecutorService executorService, String serviceDescription) {
+        if (executorService != null && !executorService.isTerminated()) {
+            logger.info("shutting down executor " + serviceDescription);
+            executorService.shutdown();
+        }
+    }
 }
