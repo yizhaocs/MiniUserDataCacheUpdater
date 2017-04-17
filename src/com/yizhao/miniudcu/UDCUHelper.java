@@ -3,6 +3,7 @@ package com.yizhao.miniudcu;
 import com.yizhao.miniudcu.util.ConstantUtil.Constants;
 import org.apache.log4j.Logger;
 
+import javax.sql.DataSource;
 import java.io.FileInputStream;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -26,11 +27,11 @@ public class UDCUHelper {
     // config files locations, we need to load them in constructor
     private String configFile = null; //"/opt/opinmind/conf/udcuv2/config.properties";
     private int refreshInterval = 60; // seconds
+    private DataSource dataSource = null;
 
     public void init() throws Exception {
         // Read properties files.
-        (configProperties = new Properties())
-                .load(new FileInputStream(configFile));
+        (configProperties = new Properties()).load(new FileInputStream(configFile));
 
         statusMap = new HashMap<String, Long>();
 
@@ -50,7 +51,7 @@ public class UDCUHelper {
 
 
     public void destroy() {
-
+        refreshThread.shutdownNow();
     }
 
     public void refresh() throws SQLException {
@@ -60,6 +61,22 @@ public class UDCUHelper {
         ekvKeys = keySets.getFirst();
         ckvKeys = keySets.getSecond();
         bidgenKeys = keySets.getThird();*/
+    }
+
+    public DataSource getDataSource() {
+        return dataSource;
+    }
+
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    public String getConfigFile() {
+        return configFile;
+    }
+
+    public void setConfigFile(String configFile) {
+        this.configFile = configFile;
     }
 
     public Map<String, ExecutorService> getThreadPools() {
