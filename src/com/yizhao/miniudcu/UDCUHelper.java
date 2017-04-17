@@ -37,8 +37,6 @@ public class UDCUHelper {
     private DataSource dataSource = null;
 
     private static Set<Integer>	ekvKeys = new HashSet<Integer>();
-    private static Set<Integer>	ckvKeys = new HashSet<Integer>();
-    private static Set<Integer> bidgenKeys = new HashSet<Integer>();
 
     public void init() throws Exception {
         // Read properties files.
@@ -71,11 +69,7 @@ public class UDCUHelper {
 
     public void refresh() throws SQLException {
         // populate the event keys and the netezza only keys
-        Triplet<Set<Integer>, Set<Integer>, Set<Integer>> keySets = DatabaseRefreshUtil.populateDataProviderKeys(dataSource);
-        // populate the netezza only keys set
-        ekvKeys = keySets.getFirst();
-        ckvKeys = keySets.getSecond();
-        bidgenKeys = keySets.getThird();
+        ekvKeys = DatabaseRefreshUtil.populateDataProviderKeys(dataSource);
     }
 
     public DataSource getDataSource() {
@@ -107,8 +101,7 @@ public class UDCUHelper {
         int waitMilliseconds = -1;
 
         if (configProperties != null) {
-            waitMilliseconds = Integer.valueOf(configProperties.getProperty(
-                    Constants._WORKER_WAIT_MILLISECONDS).trim());
+            waitMilliseconds = Integer.valueOf(configProperties.getProperty(Constants._WORKER_WAIT_MILLISECONDS).trim());
         }
 
         return waitMilliseconds;
