@@ -53,8 +53,36 @@ public class UDCUHelper {
          *  scheduleAtFixedRate()和scheduleWithFixedDelay方法参数是一样的。
          *  第一个参数是任务实例，第二个参数是延迟时间，第三个是间隔时间，第四个是时间单元。
          *  这两个方法的不同之处在方法名也能看得出来：
-         *  scheduleAtFixedRate方法是按照固定频率去执行任务的。
-         *  而scheduleWithFixedDelay方法则是按照固定的延迟去执行任务。
+         *  scheduleAtFixedRate:
+         *      scheduleAtFixedRate方法是按照固定频率去执行任务的。
+         *      The scheduleAtFixedRate() method lets execute a task periodically after a fixed delay.
+         *      The following block of code will execute a task after an initial delay of 10 seconds, and after that, it will execute the same task every 60 seconds. If the processor needs more time to execute an assigned task than the period parameter of the scheduleAtFixedRate() method, the ScheduledExecutorService will wait until the current task is completed before starting the next:
+         *      Code:
+         *          Try adding a Thread.sleep(1000); call within your run() method... Basically it's the difference between scheduling something based on when the previous execution ends and when it (logically) starts.
+         *          For example, suppose I schedule an alarm to go off with a fixed rate of once an hour, and every time it goes off, I have a cup of coffee, which takes 10 seconds. Suppose that starts at midnight, I'd have:
+         *          service.scheduleAtFixedRate(callableTask, 10, 60, TimeUnit.SECONDS);
+         *      Output:
+         *          00:00: Start making coffee
+         *          00:10: Finish making coffee
+         *          01:00: Start making coffee
+         *          01:10: Finish making coffee
+         *          02:00: Start making coffee
+         *          02:10: Finish making coffee
+         *
+         *  scheduleWithFixedDelay:
+         *      scheduleWithFixedDelay方法则是按照固定的延迟去执行任务:
+         *      If it is necessary to have a fixed length delay between iterations of the task, scheduleWithFixedDelay() should be used. For example, the following code will guarantee a 60 seconds pause between the end of the current execution and the start of another one.
+         *      Code:
+         *          If I schedule with a fixed delay of 60 seconds, I'd have:
+         *          service.scheduleWithFixedDelay(task, 10, 60, TimeUnit.SECONDS);
+         *      Output:
+         *          00:00: Start making coffee
+         *          00:10: Finish making coffee
+         *          01:10: Start making coffee
+         *          01:20: Finish making coffee
+         *          02:20: Start making coffee
+         *          02:30: Finish making coffee
+         *
          */
         refreshThread.scheduleWithFixedDelay(mDBRefreshTask, refreshInterval, refreshInterval, TimeUnit.SECONDS); //等待refreshInterval后执行mDBRefreshTask，3s后任务结束，再等待2s（间隔时间-消耗时间），如果有空余线程时，再次执行该任务
         threadPools = new HashMap<String, ExecutorService>();
