@@ -1,14 +1,19 @@
 package com.yizhao.miniudcu;
 
 import com.yizhao.miniudcu.util.ConstantUtil.Constants;
+import com.yizhao.miniudcu.util.FileUtils.FileCreateUtil;
+import com.yizhao.miniudcu.util.GenericObjectUtils.Triplet;
 import org.apache.log4j.Logger;
 
 import javax.sql.DataSource;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -35,6 +40,10 @@ public class UDCUHelper {
 
         statusMap = new HashMap<String, Long>();
 
+        // create all data directories ( if not exist ).
+        createDataDirectories();
+        refresh();
+
         refreshThread.scheduleWithFixedDelay(new Runnable() {
             public void run() {
                 Thread.currentThread().setName("UDCUFileHelper");
@@ -55,12 +64,12 @@ public class UDCUHelper {
     }
 
     public void refresh() throws SQLException {
-        /*// populate the event keys and the netezza only keys
+        // populate the event keys and the netezza only keys
         Triplet<Set<Integer>, Set<Integer>, Set<Integer>> keySets = UdcuUtil.populateDataProviderKeys(dataSource);
         // populate the netezza only keys set
         ekvKeys = keySets.getFirst();
         ckvKeys = keySets.getSecond();
-        bidgenKeys = keySets.getThird();*/
+        bidgenKeys = keySets.getThird();
     }
 
     public DataSource getDataSource() {
@@ -97,6 +106,16 @@ public class UDCUHelper {
         }
 
         return waitMilliseconds;
+    }
+
+    private void createDataDirectories() throws IOException {
+        File inbox = new File(configProperties.getProperty(Constants._INBOX_DIR));
+        File archive = new File(configProperties.getProperty(Constants._ARCHIVE_DIR));
+        File error = new File(configProperties.getProperty(Constants._ERROR_DIR));
+
+        File[] directories = { inbox, archive, error };
+
+        FileCreateUtil.createDirectories(directories);
     }
 
 }
