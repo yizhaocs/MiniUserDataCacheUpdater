@@ -25,8 +25,7 @@ public class CMPrefixDataProcessor extends UDCUDataProcessor {
     public void destroy() {
     }
 
-    @Override
-    public void processData(String[] data, String fileName, int lineNo, Boolean shouldWriteClog)
+    public void processData(String[] data, String fileName, int lineNo)
             throws Exception {
         if ((data == null) || (data.length < 5)) {
             log.error("csv file format is wrong. file name: " + fileName + " line number: " + lineNo);
