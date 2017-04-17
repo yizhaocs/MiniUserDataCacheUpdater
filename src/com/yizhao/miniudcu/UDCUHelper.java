@@ -1,6 +1,7 @@
 package com.yizhao.miniudcu;
 
 import com.yizhao.miniudcu.util.ConstantUtil.Constants;
+import com.yizhao.miniudcu.util.DatabaseUtil.DatabaseRefreshUtil;
 import com.yizhao.miniudcu.util.FileUtils.FileCreateUtil;
 import com.yizhao.miniudcu.util.GenericObjectUtils.Triplet;
 import org.apache.log4j.Logger;
@@ -11,6 +12,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -33,6 +35,10 @@ public class UDCUHelper {
     private String configFile = null; //"/opt/opinmind/conf/udcuv2/config.properties";
     private int refreshInterval = 60; // seconds
     private DataSource dataSource = null;
+
+    private static Set<Integer>	ekvKeys = new HashSet<Integer>();
+    private static Set<Integer>	ckvKeys = new HashSet<Integer>();
+    private static Set<Integer> bidgenKeys = new HashSet<Integer>();
 
     public void init() throws Exception {
         // Read properties files.
@@ -65,7 +71,7 @@ public class UDCUHelper {
 
     public void refresh() throws SQLException {
         // populate the event keys and the netezza only keys
-        Triplet<Set<Integer>, Set<Integer>, Set<Integer>> keySets = UdcuUtil.populateDataProviderKeys(dataSource);
+        Triplet<Set<Integer>, Set<Integer>, Set<Integer>> keySets = DatabaseRefreshUtil.populateDataProviderKeys(dataSource);
         // populate the netezza only keys set
         ekvKeys = keySets.getFirst();
         ckvKeys = keySets.getSecond();
