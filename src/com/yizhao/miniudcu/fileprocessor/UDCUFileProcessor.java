@@ -47,7 +47,8 @@ public class UDCUFileProcessor {
                 ExecutorService threadPool = threadPools.get("yizhaolocalfile");
                 if (threadPool == null) {
                     /**
-                     * 实现ThreadFactory接口生成自定义线程
+                     * 实现ThreadFactory接口生成自定义线程.
+                     * 工厂模式是最常用的模式之一，在创建线程的时候，我们当然也能使用工厂模式来生产Thread，这样就能替代默 认的new Thread，而且在自定义工厂里面，我们能创建自定义化的Thread，并且计数，或则限制创建Thread的数量， 给每个Thread设置对应的好听的名字，或则其他的很多很多事情，总之就是很爽
                      */
                     BasicThreadFactory factory = new BasicThreadFactory.Builder()
                             .namingPattern("yizhaolocalfile"+"-%d")
