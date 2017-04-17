@@ -44,7 +44,6 @@ public class UDCUController {
             e.printStackTrace();
             return;
         }
-        Set<String> noOrderingHostsSet = null;
 
         // we schedule the worker to process the files
         final UDCUFileProcessor worker = new UDCUFileProcessor(udcuHelper);

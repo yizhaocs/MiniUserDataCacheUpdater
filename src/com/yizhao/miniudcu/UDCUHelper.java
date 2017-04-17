@@ -9,8 +9,11 @@ import org.apache.log4j.Logger;
 import javax.sql.DataSource;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -35,6 +38,7 @@ public class UDCUHelper {
     private String configFile = null; //"/opt/opinmind/conf/udcuv2/config.properties";
     private int refreshInterval = 60; // seconds
     private DataSource dataSource = null;
+    private static final String[] fileExts = new String[]{".csv", ".force"};
 
     private static Set<Integer>	ekvKeys = new HashSet<Integer>();
 
@@ -155,5 +159,77 @@ public class UDCUHelper {
             }
 
         }
+    }
+
+
+
+    /**
+     * get the next file.
+     * <p>
+     * we define the next file to be the file with the smallest timestamp in the
+     * data dir
+     * <p>
+     * we assume the file name follows a naming convention:
+     * [PIXELTIMESTAMP].[PIXELSERVERID].[SEQUENCE_NUMBER].[EXTRA].csv
+     *
+     * @return the qualified file null if we can't find one
+     */
+    public File getNextFile(Map<String, Boolean> processingFiles) {
+        File nextFile = null;
+
+        // we only process .csv files and .force files
+        // .csv files are data files
+        // .force files are manually moved back from the 'error' dir by
+        // operation
+        FilenameFilter filter = new FilenameFilter() {
+            public boolean accept(File dir, String name) {
+                for (String fileExt : fileExts) {
+                    if (name.endsWith(fileExt)) {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        };
+
+        File directory = new File(configProperties.getProperty(Constants._INBOX_DIR).trim());
+
+        synchronized (processingFiles) {
+            File[] files = directory.listFiles(filter);
+
+            // if inbox directory doesn't exist or is empty, we will return null
+            if (files != null) {
+                if (files.length > 0) {
+
+                    // sort the dir by their timestamp
+                    Arrays.sort(files, new Comparator<File>() {
+                        public int compare(File f1, File f2) {
+                            return f1.getName().compareTo(f2.getName());
+                        }
+                    });
+
+                    // we will always get the first non-processing file to
+                    // process
+                    for (File file : files) {
+                        if (processingFiles.get(file.getName()) == null) {
+                            nextFile = file;
+
+                            processingFiles.put(file.getName(), Boolean.TRUE);
+
+                            break;
+                        }
+                    }
+                } else {
+                    if (log.isDebugEnabled()) {
+                        log.debug("directory might be empty : " + directory);
+                    }
+                }
+            } else {
+                log.info("directory might not exist : " + directory);
+            }
+        }
+
+        return nextFile;
     }
 }
