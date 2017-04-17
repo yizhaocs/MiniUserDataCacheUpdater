@@ -22,7 +22,6 @@ public class UDCUFileProcessor {
 
     private Map<String, Boolean> processingFiles = new HashMap<String, Boolean>();
     private AtomicLong fileSeq = new AtomicLong(0);
-    private ExecutorService validatorThreadPool = null;
     private UDCUHelper helper;
 
     public UDCUFileProcessor() {
@@ -30,13 +29,6 @@ public class UDCUFileProcessor {
 
     public UDCUFileProcessor(UDCUHelper helper) {
         this.helper = helper;
-
-        BasicThreadFactory factory = new BasicThreadFactory.Builder()
-                .namingPattern("validator-%d")
-                .daemon(true)
-                .priority(Thread.NORM_PRIORITY - 1)
-                .build();
-        validatorThreadPool = Executors.newSingleThreadExecutor(factory);
     }
 
 
@@ -54,11 +46,18 @@ public class UDCUFileProcessor {
                 Map<String, ExecutorService> threadPools = helper.getThreadPools();
                 ExecutorService threadPool = threadPools.get("yizhaolocalfile");
                 if (threadPool == null) {
+                    /**
+                     * 实现ThreadFactory接口生成自定义线程
+                     */
                     BasicThreadFactory factory = new BasicThreadFactory.Builder()
                             .namingPattern("yizhaolocalfile"+"-%d")
                             .daemon(true)
                             .priority(Thread.NORM_PRIORITY)
                             .build();
+                    /**
+                     * 执行者框架（Executor framework）是一种机制，它允许你将线程的创建与执行分离。它是基于Executor、ExecutorService接口和实现这两个接口的ThreadPoolExecutor类。
+                     * 在执行者框架（Executor framework）的内部，它提供一个ThreadFactory接口来创建线程，这是用来产生新的线程。
+                     */
                     threadPool = Executors.newSingleThreadExecutor(factory);
                     threadPools.put("yizhaolocalfile", threadPool);
                 }
