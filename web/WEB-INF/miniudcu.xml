@@ -39,7 +39,6 @@
             </map>
         </property>
 
-        <property name="noOrderingHosts" value="${udcu.no.ordering.hosts}" />
     </bean>
 
     <bean id="cmDataProcessor" class="com.yizhao.miniudcu.dataprocessor.CMPrefixDataProcessor"

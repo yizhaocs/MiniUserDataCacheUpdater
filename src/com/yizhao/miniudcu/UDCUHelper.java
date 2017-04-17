@@ -21,8 +21,7 @@ public class UDCUHelper {
     // config properties files
     private static Properties configProperties;
     private static Map<String, Long> statusMap;
-    private final ScheduledExecutorService refreshThread = Executors
-            .newSingleThreadScheduledExecutor();
+    private final ScheduledExecutorService refreshThread = Executors.newSingleThreadScheduledExecutor();
     private Map<String, ExecutorService> threadPools;
     // config files locations, we need to load them in constructor
     private String configFile = null; //"/opt/opinmind/conf/udcuv2/config.properties";

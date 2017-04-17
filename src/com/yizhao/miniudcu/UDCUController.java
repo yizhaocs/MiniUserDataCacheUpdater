@@ -23,7 +23,6 @@ public class UDCUController {
     private Map<String, UDCUDataProcessor> dataProcessorMap = null;
     private UDCUHelper udcuHelper;
     private UserDataCache userDataCache = null;
-    private String noOrderingHosts = null;
 
     /**
      * This is the real entry point
@@ -35,9 +34,7 @@ public class UDCUController {
         int workerWaitMilliseconds = -1;
         try {
             for (String key : dataProcessorMap.keySet()) {
-                UDCUDataProcessorFactory.getInstance().registerDataProcessor(
-                        key,
-                        dataProcessorMap.get(key));
+                UDCUDataProcessorFactory.getInstance().registerDataProcessor(key, dataProcessorMap.get(key));
             }
 
             // get the wait period for executor from the config file
@@ -48,17 +45,9 @@ public class UDCUController {
             return;
         }
         Set<String> noOrderingHostsSet = null;
-        if (noOrderingHosts != null && noOrderingHosts.length() > 0) {
-            noOrderingHostsSet = new HashSet<String>();
-            log.info("no ordering for the following source : " + noOrderingHostsSet);
-            String[] noOrderings = noOrderingHosts.split(",");
-            for (String noOrdering : noOrderings) {
-                noOrderingHostsSet.add(noOrdering.trim().toLowerCase());
-            }
-        }
 
         // we schedule the worker to process the files
-        final UDCUFileProcessor worker = new UDCUFileProcessor(udcuHelper, noOrderingHostsSet);
+        final UDCUFileProcessor worker = new UDCUFileProcessor(udcuHelper);
 
         executor = new ScheduledThreadPoolExecutor(1);
         executor.scheduleAtFixedRate(new Runnable() {
@@ -103,13 +92,5 @@ public class UDCUController {
 
     public void setUdcuHelper(UDCUHelper udcuHelper) {
         this.udcuHelper = udcuHelper;
-    }
-
-    public String getNoOrderingHosts() {
-        return noOrderingHosts;
-    }
-
-    public void setNoOrderingHosts(String noOrderingHosts) {
-        this.noOrderingHosts = noOrderingHosts;
     }
 }

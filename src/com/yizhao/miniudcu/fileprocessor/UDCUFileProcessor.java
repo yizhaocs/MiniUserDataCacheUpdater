@@ -17,15 +17,12 @@ public class UDCUFileProcessor {
 
     private ExecutorService validatorThreadPool = null;
     private UDCUHelper helper;
-    private Set<String> noOrderingHosts;
 
     public UDCUFileProcessor() {
     }
 
-    public UDCUFileProcessor(UDCUHelper helper,
-                             Set<String> noOrderingHosts) {
+    public UDCUFileProcessor(UDCUHelper helper) {
         this.helper = helper;
-        this.noOrderingHosts = noOrderingHosts;
 
         BasicThreadFactory factory = new BasicThreadFactory.Builder()
                 .namingPattern("validator-%d")
