@@ -2,11 +2,18 @@ package com.yizhao.miniudcu.fileprocessor;
 
 
 import com.yizhao.miniudcu.UDCUHelper;
+import com.yizhao.miniudcu.dataprocessor.UDCUDataProcessor;
+import com.yizhao.miniudcu.dataprocessor.UDCUDataProcessorFactory;
+import com.yizhao.miniudcu.util.FileUtils.FileCloseUtil;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.apache.commons.lang3.text.StrTokenizer;
 import org.apache.log4j.Logger;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -90,7 +97,68 @@ public class UDCUFileProcessor {
             pipeTokenizer.setDelimiterChar('|');
         }
         public void run() {
-
+            new FileParser() {
+                public void processData(String line, StrTokenizer pipeTokenizer, String fileName, int lineNo) throws Exception {
+                    String[] data = pipeTokenizer.reset(line).getTokenArray();
+                    String dataType = data[0];
+                    UDCUDataProcessor dataProcessor = UDCUDataProcessorFactory.getInstance().getDataProcessor(dataType);
+                    dataProcessor.processData(data, fileName, lineNo);
+                }
+            }.processFile(file, pipeTokenizer);
         }
     }
+
+
+    private abstract class FileParser {
+        public FileParser() {
+        }
+
+        /**
+         * process a specific file
+         *
+         * @param file the file to process
+         * @return whether the processing is successful
+         */
+        public boolean processFile(File file, StrTokenizer pipeTokenizer)
+        {
+            boolean success = false;
+            BufferedReader bufferedReader = null;
+
+            String line = null;
+            int lineNo = 0;
+
+            try {
+                bufferedReader = new BufferedReader(new FileReader(file));
+                // Read each line of text in the file
+                while((line = bufferedReader.readLine()) != null)
+                {
+                    // process the row data
+                    // if it's validator, then we only want to validate the first 1000 lines of data
+                    if (lineNo < 1000) {
+                        processData(line, pipeTokenizer, file.getName(), lineNo);
+                    }
+                    lineNo++;
+
+                    if (lineNo % 100000 == 0)
+                        log.info("processed " + lineNo + " lines for file: " + file);
+                }
+
+                success = true;
+            } catch (FileNotFoundException e) {
+                log.error("can't find the file " + file + ", line number " + lineNo + ". line content is " + line, e);
+            } catch (IOException e) {
+                log.error("can't read from the file " + file + ", line number " + lineNo + ". line content is " + line, e);
+            } catch (Exception e) {
+                log.error("failed to process file " + file + ", line number " + lineNo + ". line content is " + line, e);
+            }
+            finally {
+                FileCloseUtil.close(bufferedReader);
+            }
+
+            return success;
+        }
+
+        abstract public void processData(String line, StrTokenizer pipeTokenizer, String fileName, int lineNo) throws Exception;
+    }
+
 }

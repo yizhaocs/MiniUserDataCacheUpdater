@@ -26,7 +26,7 @@ public abstract class UDCUDataProcessor {
      * @param lineNo   the line number of the current line
      * @throws Exception
      */
-    abstract public void processData(String[] data, String fileName, int lineNo, Boolean shouldWriteClog) throws Exception;
+    abstract public void processData(String[] data, String fileName, int lineNo) throws Exception;
 
     abstract public void validate(String[] data, String fileName, int lineNo) throws Exception;
 
