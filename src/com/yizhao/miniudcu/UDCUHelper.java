@@ -48,6 +48,7 @@ public class UDCUHelper {
         createDataDirectories();
         refresh();
 
+        DBRefreshTask mDBRefreshTask = new DBRefreshTask();
         /**
          *  scheduleAtFixedRate()和scheduleWithFixedDelay方法参数是一样的。
          *  第一个参数是任务实例，第二个参数是延迟时间，第三个是间隔时间，第四个是时间单元。
@@ -55,17 +56,7 @@ public class UDCUHelper {
          *  scheduleAtFixedRate方法是按照固定频率去执行任务的。
          *  而scheduleWithFixedDelay方法则是按照固定的延迟去执行任务。
          */
-        refreshThread.scheduleWithFixedDelay(new Runnable() {
-            public void run() {
-                Thread.currentThread().setName("UDCUFileHelper");
-                try {
-                    refresh();
-                } catch (Exception e) {
-                    log.error("UDCUFileHelper.refresh:", e);
-                }
-
-            }
-        }, refreshInterval, refreshInterval, TimeUnit.SECONDS);
+        refreshThread.scheduleWithFixedDelay(mDBRefreshTask, refreshInterval, refreshInterval, TimeUnit.SECONDS); //等待refreshInterval后执行mDBRefreshTask，3s后任务结束，再等待2s（间隔时间-消耗时间），如果有空余线程时，再次执行该任务
         threadPools = new HashMap<String, ExecutorService>();
     }
 
@@ -124,4 +115,17 @@ public class UDCUHelper {
         FileCreateUtil.createDirectories(directories);
     }
 
+    public class DBRefreshTask implements Runnable{
+
+        @SuppressWarnings("deprecation")
+        public void run() {
+            Thread.currentThread().setName("UDCUFileHelper");
+            try {
+                refresh();
+            } catch (Exception e) {
+                log.error("UDCUFileHelper.refresh:", e);
+            }
+
+        }
+    }
 }

@@ -48,13 +48,16 @@ public class UDCUController {
 
         // we schedule the worker to process the files
         final UDCUFileProcessor worker = new UDCUFileProcessor(udcuHelper);
-
+        FileProcessTask mFileProcessTask = new FileProcessTask(worker);
         executor = new ScheduledThreadPoolExecutor(1);
-        executor.scheduleAtFixedRate(new Runnable() {
-            public void run() {
-                worker.process();
-            }
-        }, 0L, workerWaitMilliseconds, TimeUnit.MILLISECONDS);
+        /**
+         *  scheduleAtFixedRate()和scheduleWithFixedDelay方法参数是一样的。
+         *  第一个参数是任务实例，第二个参数是延迟时间，第三个是间隔时间，第四个是时间单元。
+         *  这两个方法的不同之处在方法名也能看得出来：
+         *  scheduleAtFixedRate方法是按照固定频率去执行任务的。
+         *  而scheduleWithFixedDelay方法则是按照固定的延迟去执行任务。
+         */
+        executor.scheduleAtFixedRate(mFileProcessTask, 0L, workerWaitMilliseconds, TimeUnit.MILLISECONDS);
     }
 
     public void destroy() {
@@ -92,5 +95,18 @@ public class UDCUController {
 
     public void setUdcuHelper(UDCUHelper udcuHelper) {
         this.udcuHelper = udcuHelper;
+    }
+
+    public class FileProcessTask implements Runnable{
+        private UDCUFileProcessor worker;
+
+        public FileProcessTask(UDCUFileProcessor worker){
+            this.worker = worker;
+        }
+
+        @SuppressWarnings("deprecation")
+        public void run() {
+            worker.process();
+        }
     }
 }
