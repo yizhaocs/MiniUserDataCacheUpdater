@@ -1,14 +1,13 @@
-package com.yizhao.miniudcu.util.OtherUtils;
+package com.yizhao.miniudcu.util.RandomUtils;
 
 import com.yizhao.miniudcu.util.GenericObjectUtils.Pair;
 
 import java.util.Random;
 
 /**
- * Created by yzhao on 4/15/17.
+ * Created by yzhao on 4/18/17.
  */
 public class RandomUtil {
-
     private static Random random = new Random();
 
     public static int randomIntegerInRange( int min, int max ){

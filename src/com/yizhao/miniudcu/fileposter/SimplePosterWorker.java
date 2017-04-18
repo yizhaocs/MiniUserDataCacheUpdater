@@ -1,7 +1,7 @@
 package com.yizhao.miniudcu.fileposter;
 
 import com.yizhao.miniudcu.util.ConstantUtil.Constants;
-import com.yizhao.miniudcu.util.OtherUtils.ArgumentsUtil;
+import com.yizhao.miniudcu.util.ArgumentUtils.ArgumentsUtil;
 import org.apache.commons.io.IOUtils;
 import com.yizhao.miniudcu.util.FileUtils.FileCreateUtil;
 import com.yizhao.miniudcu.util.FileUtils.FileMoveUtil;

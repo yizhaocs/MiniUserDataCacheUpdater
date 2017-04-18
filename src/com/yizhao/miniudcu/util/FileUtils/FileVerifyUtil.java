@@ -1,6 +1,6 @@
 package com.yizhao.miniudcu.util.FileUtils;
 
-import com.yizhao.miniudcu.util.OtherUtils.ArgumentsUtil;
+import com.yizhao.miniudcu.util.ArgumentUtils.ArgumentsUtil;
 
 import java.io.File;
 import java.util.Collection;

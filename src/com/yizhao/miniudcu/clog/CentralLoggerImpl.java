@@ -1,6 +1,6 @@
 package com.yizhao.miniudcu.clog;
 
-import com.yizhao.miniudcu.util.OtherUtils.ArgumentsUtil;
+import com.yizhao.miniudcu.util.ArgumentUtils.ArgumentsUtil;
 import com.yizhao.miniudcu.util.StringUtils.StringUtil;
 import org.apache.log4j.Layout;
 import org.apache.log4j.Level;

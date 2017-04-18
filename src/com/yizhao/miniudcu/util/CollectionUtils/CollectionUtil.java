@@ -1,4 +1,6 @@
-package com.yizhao.miniudcu.util.OtherUtils;
+package com.yizhao.miniudcu.util.CollectionUtils;
+
+import com.yizhao.miniudcu.util.RandomUtils.RandomUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,7 +18,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 /**
- * Created by yzhao on 4/15/17.
+ * Created by yzhao on 4/18/17.
  */
 public class CollectionUtil {
     public static boolean empty( Object[] arr ){

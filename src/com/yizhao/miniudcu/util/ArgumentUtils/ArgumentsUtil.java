@@ -1,4 +1,4 @@
-package com.yizhao.miniudcu.util.OtherUtils;
+package com.yizhao.miniudcu.util.ArgumentUtils;
 
 import java.util.Map;
 
@@ -60,6 +60,28 @@ public class ArgumentsUtil {
                 throw new NullPointerException("The parameter number " + (i + 1)
                         + " is null");
         }
+    }
+
+
+    /**
+     * Validate that the condition is true.
+     * If not, throw IllegalArgumentException
+     *
+     * Used to validate params, e.g. x must be > 0
+     *
+     * @param condition a boolean
+     * @param error message ( optional )
+     * @throws IllegalArgumentException if condition is not true
+     */
+    public static void validateTrue( boolean condition, String msg )
+            throws IllegalArgumentException {
+        if( !condition ){
+            throw new IllegalArgumentException( msg != null ? msg : "condition is false" );
+        }
+    }
+
+    public static void validateTrue( boolean condition ){
+        validateTrue( condition, null );
     }
 
 }
