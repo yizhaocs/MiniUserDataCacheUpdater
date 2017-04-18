@@ -7,6 +7,20 @@
     <groupId>MiniUserDataCacheUpdater</groupId>
     <artifactId>com.yizhao.miniudcu</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
+    <name>Mini User Data Cache Updater</name>
+
+    <properties>
+        <spring.framework.version>4.0.0.RELEASE</spring.framework.version>
+        <jackson.version>1.9.13</jackson.version>
+        <jstl.version>1.2</jstl.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <org.apache.maven.plugins.version>2.4</org.apache.maven.plugins.version>
+        <maven-compiler-plugin.version>2.3.2</maven-compiler-plugin.version>
+        <mysql.version>5.0.8</mysql.version>
+        <properties.dir>../MavenBuild/properties</properties.dir>
+    </properties>
+
 
     <dependencies>
         <dependency>
@@ -66,4 +80,43 @@
         </dependency>
 
     </dependencies>
+
+    <build>
+        <finalName>MiniUserDataCacheUpdater</finalName>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>${org.apache.maven.plugins.version}</version>
+                    <configuration>
+                        <warSourceDirectory>src/main/webapp</warSourceDirectory>
+                        <warName>miniudcu</warName>
+                        <failOnMissingWebXml>false</failOnMissingWebXml>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven-compiler-plugin.version}</version>
+                    <configuration>
+                        <source>1.6</source>
+                        <target>1.6</target>
+                        <compilerArgument></compilerArgument>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.tomcat.maven</groupId>
+                    <artifactId>tomcat6-maven-plugin</artifactId>
+                    <version>2.2</version>
+                    <configuration>
+                        <path>/</path>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>
