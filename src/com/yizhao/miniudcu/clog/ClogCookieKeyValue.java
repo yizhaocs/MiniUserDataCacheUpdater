@@ -1,6 +1,7 @@
 package com.yizhao.miniudcu.clog;
 
-import com.yizhao.miniudcu.util.OtherUtils.CollectionUtil;
+
+import com.yizhao.miniudcu.util.CollectionUtils.CollectionUtil;
 
 import java.util.Collection;
 import java.util.Date;
