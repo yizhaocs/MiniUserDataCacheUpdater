@@ -5,10 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>yizhao</groupId>
-    <!--The name of the WAR file is build upon the arifactId and the version parameters you set in your maven pom file.-->
+    <!-- Build war step 1: The name of the WAR file is build upon the arifactId and the version parameters you set in your maven pom file.-->
     <artifactId>Mini-User-Data-Cache-Updater</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>war</packaging><!--We need to set the packaging to war. Web applications in Tomcat are packed into WAR files (Web archives) encapsulating all the data of the app.-->
+    <packaging>war</packaging><!-- Build war step 2: We need to set the packaging to war. Web applications in Tomcat are packed into WAR files (Web archives) encapsulating all the data of the app.-->
     <name>Mini User Data Cache Updater</name>
 
     <dependencies>
@@ -16,7 +16,7 @@
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>3.1.0</version>
-            <scope>provided</scope> <!--We set the scope to “provided” because Tomcat has all the libraries required already build in.-->
+            <scope>provided</scope> <!-- Build war step 3: We set the scope to “provided” because Tomcat has all the libraries required already build in.-->
         </dependency>
 
         <dependency>
@@ -80,7 +80,7 @@
     <build>
         <sourceDirectory>src</sourceDirectory>
         <plugins>
-            <!--We need the Maven WAR plugin to be able to create the WAR file-->
+            <!--  Build war step 4: We need the Maven WAR plugin to be able to create the WAR file-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
@@ -90,7 +90,7 @@
                     <warSourceDirectory>src/main/webapp</warSourceDirectory>  	<!--Single directory for extra files to include in the WAR. This is where you place your JSP files.-->
                 </configuration>
             </plugin>
-            <!--In the compiler section of the WAR plugin set 1.8. This means the classes will be compiled with Java 8-->
+            <!--  Build war step 5: In the compiler section of the WAR plugin set 1.8. This means the classes will be compiled with Java 8-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
