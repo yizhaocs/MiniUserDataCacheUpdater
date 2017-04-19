@@ -9,9 +9,9 @@
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
-            WEB-INF/configFiles.xml
-            WEB-INF/datalogging.xml
-            WEB-INF/miniudcu.xml
+            web/WEB-INF/configFiles.xml
+            web/WEB-INF/datalogging.xml
+            web/WEB-INF/miniudcu.xml
         </param-value>
     </context-param>
 </web-app>
