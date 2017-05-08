@@ -9,14 +9,14 @@
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
-            web/WEB-INF/configFiles.xml
-            web/WEB-INF/datalogging.xml
-            web/WEB-INF/miniudcu.xml
+            WEB-INF/configFiles.xml
+            WEB-INF/datalogging.xml
+            WEB-INF/miniudcu.xml
         </param-value>
     </context-param>
 
-    <listener>
+    <!--<listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>
+    </listener>-->
 
 </web-app>

@@ -12,12 +12,12 @@
     <name>Mini User Data Cache Updater</name>
 
     <dependencies>
-        <dependency>
+<!--        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>3.1.0</version>
-            <scope>provided</scope> <!-- Build war step 3: We set the scope to “provided” because Tomcat has all the libraries required already build in.-->
-        </dependency>
+            <scope>provided</scope> &lt;!&ndash; Build war step 3: We set the scope to “provided” because Tomcat has all the libraries required already build in.&ndash;&gt;
+        </dependency>-->
 
         <dependency>
             <groupId>log4j</groupId>
@@ -25,11 +25,11 @@
             <version>1.2.14</version>
         </dependency>
 
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.0.8</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>mysql</groupId>-->
+            <!--<artifactId>mysql-connector-java</artifactId>-->
+            <!--<version>5.0.8</version>-->
+        <!--</dependency>-->
 
         <!--for "BasicThreadFactory" in UDCUFileProcessor.java-->
         <dependency>
@@ -42,7 +42,7 @@
         <dependency>
             <groupId>commons-dbcp</groupId>
             <artifactId>commons-dbcp</artifactId>
-            <version>1.4</version>
+            <version>1.2.1</version>
         </dependency>
 
         <!--for spring-->
@@ -86,8 +86,30 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.3</version>
                 <configuration>
-                    <webXml>web/WEB-INF/web.xml</webXml>
-                    <warSourceDirectory>src/main/webapp</warSourceDirectory>  	<!--Single directory for extra files to include in the WAR. This is where you place your JSP files.-->
+                    <webXml>WEB-INF/web.xml</webXml>
+                    <!--<warSourceDirectory>src/main/webapp</warSourceDirectory>  	&lt;!&ndash;Single directory for extra files to include in the WAR. This is where you place your JSP files.&ndash;&gt;-->
+                    <webResources>
+                        <resource>
+                            <directory>WEB-INF</directory>
+                            <targetPath>WEB-INF</targetPath>
+                            <filtering>false</filtering>
+                            <includes>
+                                <include>*.xml</include>
+                            </includes>
+                        </resource>
+                    </webResources>
+                    <warSourceExcludes>
+                        WEB-INF/lib/servlet-api-*.jar,
+                        bin/**,
+                        dist/**,
+                        **/pom.xml,
+                        **/*.java
+                    </warSourceExcludes>
+                    <packagingExcludes>
+                        WEB-INF/lib/junit-*.jar,
+                        WEB-INF/lib/mysql-connector-java-*.jar,
+                        WEB-INF/lib/servlet-api-*.jar
+                    </packagingExcludes>
                 </configuration>
             </plugin>
             <!--  Build war step 5: In the compiler section of the WAR plugin set 1.8. This means the classes will be compiled with Java 8-->
@@ -101,5 +123,6 @@
                 </configuration>
             </plugin>
         </plugins>
+        <outputDirectory>WEB-INF/classes</outputDirectory>
     </build>
 </project>
